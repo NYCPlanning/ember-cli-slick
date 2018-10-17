@@ -61,7 +61,7 @@ export default Component.extend({
     var _this = this;
 
     scheduleOnce('actions', this.$(), function() {
-      _this.sendAction('slickInit', this[0]);
+      if (_this.get('slickInit')) _this.get('slickInit')(this[0]);
     });
 
     return this.$().slick({
@@ -110,24 +110,30 @@ export default Component.extend({
       rtl              : this.get('rtl')
     })
     .on('afterChange', function ($event, slick, currentSlide) {
-      _this.sendAction('afterChange', slick, currentSlide);
+      const afterChange = _this.get('afterChange');
+      if (afterChange) afterChange('afterChange', slick, currentSlide)
     })
     .on('beforeChange', function ($event, slick, currentSlide, nextSlide) {
-      _this.sendAction('beforeChange', slick, currentSlide, nextSlide);
+      const beforeChange = _this.get('beforeChange');
+      if (beforeChange) beforeChange('beforeChange', slick, currentSlide, nextSlide)
     })
     .on('edge', function ($event, slick, direction) {
-      _this.sendAction('edge', slick, direction);
+      const edge = _this.get('edge');
+      if (edge) edge('edge', slick, direction)
     })
     .on('reInit', function ($event, slick) {
-      _this.sendAction('reInit', slick);
+      const reInit = _this.get('reInit');
+      if (reInit) reInit('reInit', slick)
     })
     .on('setPosition', function ($event, slick) {
       if(!_this.get('isDestroyed')) {
-        _this.sendAction('setPosition', slick);
+        const setPosition = _this.get('setPosition');
+        if (setPosition) setPosition('setPosition', slick)
       }
     })
     .on('swipe', function ($event, slick, direction) {
-      _this.sendAction('swiped', slick, direction);
+      const swiped = _this.get('swiped');
+      if (swiped) swiped('swiped', slick, direction)
     });
   }
 });
